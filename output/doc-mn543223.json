@@ -1,0 +1,1446 @@
+{
+  "doc_id": "doc-mn543223",
+  "filename": "sem 2 marks .jpg",
+  "timestamp": "2026-03-24T21:14:20.986159Z",
+  "ocr_provider": "pytesseract",
+  "text": "han, ~~, ot, \u201cse,, ., ES, -, >, a,, Ah, ore, -, EE, 3, Li!, RS, 2, sj, Be, BB, fF, Fae, peer, Sj)e, aD, Tesae, rte, FE, x,, N, <q, \u00e9, B]2, aa, Fn, ano, 2, Fe, S<, m, =, $3, =:, [3, \\, 2, =, Zle\u00ab, \u00ab4, uc, one, \u00ab, ., 5S, os, |, ~~, N, \u2018, 5, :, ge, EH, Ne, i, SB, =, 3, \u201c, :, s, ., ;, 32, Fd, z, z, :, !, \u00a3z, 5, &, a, :, :, aso, =, =, =, \\, ', 7, z, Fe, \u2018, ~=s, ac, x, &, ., :, :, 25, za, bo, y, :, :, so, EE, =, F4, NX, :, 2S, Be, 4, &, eS, :, ~\u20ac\u00a2, gs, 3.6, Py, 1, 2, =\u00a22\\, lee, 8, \\, :, B, B, yg, ag, Zz, a, 2, ee, Z, :, Se, fel(z|22, 28, &, wo2, Z27)2|5, =, =, 2, Zz, :, 2, ss, =25/2(6, #, Eo, Fe}, ey, sz, g2/\"|/28, 22, &, 2, ae, 2, -, Yaz, SE, 22226, 2, 23, a, 26, &, 3, 3, 2, Ss, S$,, Be, ~*~, BZ, cf, =, 623284372822, z=, 2, S2e5e3o2232, 22, 5\u00a2, =, 2522223, 2, \u00a3, a, =, 2222, 76, 3, F, =, =, Zig, 4223, 7%, -, =, 2, zee, 279, *, *, (\u201c, os, 2, +, Se, tos, a, shone, re, ee, 1p, ip, 2, :, a, rnaass, -, ., 47, NOT, ee, OO, c, Me, Me,, \u00e9, i, _, |, |, rr",
+  "fields": {
+    "name": "Eo Fe",
+    "date": null,
+    "amount": 3.0
+  },
+  "validation": {
+    "passed": false,
+    "missing_fields": [
+      "date"
+    ],
+    "format_errors": []
+  },
+  "anomaly": {
+    "is_anomaly": true,
+    "sklearn_score": -0.013363509376488891,
+    "pyod_outlier": true,
+    "feature_vector": {
+      "text_length": 711,
+      "word_count": 244,
+      "amount": 3.0,
+      "ocr_confidence": 0.3931147540983606
+    }
+  },
+  "ocr_confidence": 0.3931,
+  "low_confidence_words": [
+    {
+      "word": "han",
+      "confidence": 34.0,
+      "bbox": {
+        "x": 238,
+        "y": 0,
+        "w": 18,
+        "h": 19
+      }
+    },
+    {
+      "word": "~~",
+      "confidence": 34.0,
+      "bbox": {
+        "x": 429,
+        "y": 0,
+        "w": 4,
+        "h": 1
+      }
+    },
+    {
+      "word": "ot",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 469,
+        "y": 0,
+        "w": 13,
+        "h": 19
+      }
+    },
+    {
+      "word": "\u201cse,",
+      "confidence": 38.0,
+      "bbox": {
+        "x": 481,
+        "y": 0,
+        "w": 53,
+        "h": 11
+      }
+    },
+    {
+      "word": ".",
+      "confidence": 13.0,
+      "bbox": {
+        "x": 85,
+        "y": 35,
+        "w": 4,
+        "h": 3
+      }
+    },
+    {
+      "word": "ES",
+      "confidence": 27.0,
+      "bbox": {
+        "x": 205,
+        "y": 0,
+        "w": 134,
+        "h": 35
+      }
+    },
+    {
+      "word": "-",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 95,
+        "y": 43,
+        "w": 12,
+        "h": 7
+      }
+    },
+    {
+      "word": "Ah",
+      "confidence": 36.0,
+      "bbox": {
+        "x": 272,
+        "y": 31,
+        "w": 22,
+        "h": 20
+      }
+    },
+    {
+      "word": "ore",
+      "confidence": 27.0,
+      "bbox": {
+        "x": 562,
+        "y": 29,
+        "w": 56,
+        "h": 24
+      }
+    },
+    {
+      "word": "EE",
+      "confidence": 28.0,
+      "bbox": {
+        "x": 193,
+        "y": 41,
+        "w": 85,
+        "h": 28
+      }
+    },
+    {
+      "word": "Li!",
+      "confidence": 38.0,
+      "bbox": {
+        "x": 538,
+        "y": 54,
+        "w": 63,
+        "h": 20
+      }
+    },
+    {
+      "word": "sj",
+      "confidence": 20.0,
+      "bbox": {
+        "x": 329,
+        "y": 336,
+        "w": 50,
+        "h": 21
+      }
+    },
+    {
+      "word": "Be",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 431,
+        "y": 335,
+        "w": 98,
+        "h": 23
+      }
+    },
+    {
+      "word": "BB",
+      "confidence": 9.0,
+      "bbox": {
+        "x": 561,
+        "y": 334,
+        "w": 42,
+        "h": 21
+      }
+    },
+    {
+      "word": "fF",
+      "confidence": 14.0,
+      "bbox": {
+        "x": 631,
+        "y": 326,
+        "w": 18,
+        "h": 40
+      }
+    },
+    {
+      "word": "Fae",
+      "confidence": 40.0,
+      "bbox": {
+        "x": 668,
+        "y": 330,
+        "w": 83,
+        "h": 28
+      }
+    },
+    {
+      "word": "peer",
+      "confidence": 7.0,
+      "bbox": {
+        "x": 836,
+        "y": 328,
+        "w": 64,
+        "h": 25
+      }
+    },
+    {
+      "word": "Sj)e",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 336,
+        "y": 353,
+        "w": 45,
+        "h": 36
+      }
+    },
+    {
+      "word": "aD",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 410,
+        "y": 372,
+        "w": 44,
+        "h": 5
+      }
+    },
+    {
+      "word": "Tesae",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 480,
+        "y": 368,
+        "w": 235,
+        "h": 17
+      }
+    },
+    {
+      "word": "x,",
+      "confidence": 24.0,
+      "bbox": {
+        "x": 331,
+        "y": 388,
+        "w": 13,
+        "h": 29
+      }
+    },
+    {
+      "word": "N",
+      "confidence": 20.0,
+      "bbox": {
+        "x": 855,
+        "y": 391,
+        "w": 7,
+        "h": 7
+      }
+    },
+    {
+      "word": "<q",
+      "confidence": 32.0,
+      "bbox": {
+        "x": 176,
+        "y": 397,
+        "w": 20,
+        "h": 36
+      }
+    },
+    {
+      "word": "B]2",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 331,
+        "y": 396,
+        "w": 51,
+        "h": 34
+      }
+    },
+    {
+      "word": "Fn",
+      "confidence": 18.0,
+      "bbox": {
+        "x": 488,
+        "y": 404,
+        "w": 43,
+        "h": 15
+      }
+    },
+    {
+      "word": "ano",
+      "confidence": 18.0,
+      "bbox": {
+        "x": 556,
+        "y": 396,
+        "w": 51,
+        "h": 34
+      }
+    },
+    {
+      "word": "Fe",
+      "confidence": 38.0,
+      "bbox": {
+        "x": 669,
+        "y": 400,
+        "w": 47,
+        "h": 16
+      }
+    },
+    {
+      "word": "S<",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 152,
+        "y": 428,
+        "w": 44,
+        "h": 13
+      }
+    },
+    {
+      "word": "$3",
+      "confidence": 41.0,
+      "bbox": {
+        "x": 154,
+        "y": 442,
+        "w": 42,
+        "h": 18
+      }
+    },
+    {
+      "word": "=:",
+      "confidence": 34.0,
+      "bbox": {
+        "x": 262,
+        "y": 446,
+        "w": 14,
+        "h": 7
+      }
+    },
+    {
+      "word": "[3",
+      "confidence": 26.0,
+      "bbox": {
+        "x": 332,
+        "y": 443,
+        "w": 12,
+        "h": 9
+      }
+    },
+    {
+      "word": "\\",
+      "confidence": 39.0,
+      "bbox": {
+        "x": 808,
+        "y": 413,
+        "w": 42,
+        "h": 43
+      }
+    },
+    {
+      "word": "2",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 154,
+        "y": 460,
+        "w": 42,
+        "h": 15
+      }
+    },
+    {
+      "word": "Zle\u00ab",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 332,
+        "y": 438,
+        "w": 87,
+        "h": 37
+      }
+    },
+    {
+      "word": "\u00ab4",
+      "confidence": 20.0,
+      "bbox": {
+        "x": 448,
+        "y": 453,
+        "w": 48,
+        "h": 10
+      }
+    },
+    {
+      "word": "uc",
+      "confidence": 20.0,
+      "bbox": {
+        "x": 522,
+        "y": 452,
+        "w": 48,
+        "h": 10
+      }
+    },
+    {
+      "word": ".",
+      "confidence": 39.0,
+      "bbox": {
+        "x": 789,
+        "y": 462,
+        "w": 2,
+        "h": 3
+      }
+    },
+    {
+      "word": "|",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 334,
+        "y": 473,
+        "w": 11,
+        "h": 9
+      }
+    },
+    {
+      "word": "~~",
+      "confidence": 31.0,
+      "bbox": {
+        "x": 795,
+        "y": 454,
+        "w": 37,
+        "h": 49
+      }
+    },
+    {
+      "word": "N",
+      "confidence": 27.0,
+      "bbox": {
+        "x": 856,
+        "y": 458,
+        "w": 16,
+        "h": 24
+      }
+    },
+    {
+      "word": "\u2018",
+      "confidence": 20.0,
+      "bbox": {
+        "x": 75,
+        "y": 501,
+        "w": 1,
+        "h": 4
+      }
+    },
+    {
+      "word": "ge",
+      "confidence": 31.0,
+      "bbox": {
+        "x": 152,
+        "y": 498,
+        "w": 45,
+        "h": 24
+      }
+    },
+    {
+      "word": "EH",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 263,
+        "y": 494,
+        "w": 15,
+        "h": 38
+      }
+    },
+    {
+      "word": "Ne",
+      "confidence": 38.0,
+      "bbox": {
+        "x": 851,
+        "y": 506,
+        "w": 49,
+        "h": 9
+      }
+    },
+    {
+      "word": "s",
+      "confidence": 38.0,
+      "bbox": {
+        "x": 265,
+        "y": 547,
+        "w": 12,
+        "h": 7
+      }
+    },
+    {
+      "word": ".",
+      "confidence": 33.0,
+      "bbox": {
+        "x": 847,
+        "y": 539,
+        "w": 7,
+        "h": 4
+      }
+    },
+    {
+      "word": "z",
+      "confidence": 25.0,
+      "bbox": {
+        "x": 410,
+        "y": 553,
+        "w": 14,
+        "h": 16
+      }
+    },
+    {
+      "word": "z",
+      "confidence": 22.0,
+      "bbox": {
+        "x": 485,
+        "y": 551,
+        "w": 13,
+        "h": 16
+      }
+    },
+    {
+      "word": ":",
+      "confidence": 31.0,
+      "bbox": {
+        "x": 794,
+        "y": 555,
+        "w": 2,
+        "h": 12
+      }
+    },
+    {
+      "word": "!",
+      "confidence": 38.0,
+      "bbox": {
+        "x": 74,
+        "y": 581,
+        "w": 3,
+        "h": 13
+      }
+    },
+    {
+      "word": "\u00a3z",
+      "confidence": 32.0,
+      "bbox": {
+        "x": 152,
+        "y": 574,
+        "w": 47,
+        "h": 17
+      }
+    },
+    {
+      "word": "&",
+      "confidence": 19.0,
+      "bbox": {
+        "x": 410,
+        "y": 570,
+        "w": 15,
+        "h": 19
+      }
+    },
+    {
+      "word": ":",
+      "confidence": 24.0,
+      "bbox": {
+        "x": 75,
+        "y": 598,
+        "w": 2,
+        "h": 5
+      }
+    },
+    {
+      "word": "aso",
+      "confidence": 28.0,
+      "bbox": {
+        "x": 150,
+        "y": 586,
+        "w": 49,
+        "h": 28
+      }
+    },
+    {
+      "word": "\\",
+      "confidence": 35.0,
+      "bbox": {
+        "x": 796,
+        "y": 586,
+        "w": 32,
+        "h": 23
+      }
+    },
+    {
+      "word": "'",
+      "confidence": 10.0,
+      "bbox": {
+        "x": 75,
+        "y": 608,
+        "w": 2,
+        "h": 4
+      }
+    },
+    {
+      "word": "Fe",
+      "confidence": 28.0,
+      "bbox": {
+        "x": 487,
+        "y": 602,
+        "w": 14,
+        "h": 6
+      }
+    },
+    {
+      "word": "\u2018",
+      "confidence": 25.0,
+      "bbox": {
+        "x": 75,
+        "y": 616,
+        "w": 2,
+        "h": 5
+      }
+    },
+    {
+      "word": "~=s",
+      "confidence": 39.0,
+      "bbox": {
+        "x": 150,
+        "y": 603,
+        "w": 49,
+        "h": 30
+      }
+    },
+    {
+      "word": "&",
+      "confidence": 9.0,
+      "bbox": {
+        "x": 488,
+        "y": 610,
+        "w": 13,
+        "h": 9
+      }
+    },
+    {
+      "word": ".",
+      "confidence": 31.0,
+      "bbox": {
+        "x": 797,
+        "y": 607,
+        "w": 2,
+        "h": 3
+      }
+    },
+    {
+      "word": ":",
+      "confidence": 5.0,
+      "bbox": {
+        "x": 850,
+        "y": 611,
+        "w": 2,
+        "h": 2
+      }
+    },
+    {
+      "word": "bo",
+      "confidence": 37.0,
+      "bbox": {
+        "x": 407,
+        "y": 617,
+        "w": 19,
+        "h": 34
+      }
+    },
+    {
+      "word": "y",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 487,
+        "y": 620,
+        "w": 15,
+        "h": 21
+      }
+    },
+    {
+      "word": ":",
+      "confidence": 38.0,
+      "bbox": {
+        "x": 798,
+        "y": 624,
+        "w": 3,
+        "h": 4
+      }
+    },
+    {
+      "word": ":",
+      "confidence": 24.0,
+      "bbox": {
+        "x": 75,
+        "y": 643,
+        "w": 2,
+        "h": 13
+      }
+    },
+    {
+      "word": "EE",
+      "confidence": 32.0,
+      "bbox": {
+        "x": 261,
+        "y": 636,
+        "w": 48,
+        "h": 28
+      }
+    },
+    {
+      "word": "F4",
+      "confidence": 12.0,
+      "bbox": {
+        "x": 485,
+        "y": 634,
+        "w": 17,
+        "h": 27
+      }
+    },
+    {
+      "word": "NX",
+      "confidence": 35.0,
+      "bbox": {
+        "x": 800,
+        "y": 625,
+        "w": 18,
+        "h": 32
+      }
+    },
+    {
+      "word": "eS",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 488,
+        "y": 652,
+        "w": 15,
+        "h": 18
+      }
+    },
+    {
+      "word": "~\u20ac\u00a2",
+      "confidence": 22.0,
+      "bbox": {
+        "x": 155,
+        "y": 663,
+        "w": 45,
+        "h": 29
+      }
+    },
+    {
+      "word": "1",
+      "confidence": 1.0,
+      "bbox": {
+        "x": 74,
+        "y": 688,
+        "w": 3,
+        "h": 14
+      }
+    },
+    {
+      "word": "2",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 153,
+        "y": 683,
+        "w": 47,
+        "h": 23
+      }
+    },
+    {
+      "word": "=\u00a22\\",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 266,
+        "y": 683,
+        "w": 47,
+        "h": 20
+      }
+    },
+    {
+      "word": "lee",
+      "confidence": 42.0,
+      "bbox": {
+        "x": 375,
+        "y": 682,
+        "w": 53,
+        "h": 21
+      }
+    },
+    {
+      "word": "8",
+      "confidence": 42.0,
+      "bbox": {
+        "x": 490,
+        "y": 680,
+        "w": 14,
+        "h": 21
+      }
+    },
+    {
+      "word": "\\",
+      "confidence": 15.0,
+      "bbox": {
+        "x": 889,
+        "y": 670,
+        "w": 11,
+        "h": 17
+      }
+    },
+    {
+      "word": "B",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 155,
+        "y": 703,
+        "w": 12,
+        "h": 8
+      }
+    },
+    {
+      "word": "B",
+      "confidence": 44.0,
+      "bbox": {
+        "x": 300,
+        "y": 697,
+        "w": 10,
+        "h": 12
+      }
+    },
+    {
+      "word": "yg",
+      "confidence": 35.0,
+      "bbox": {
+        "x": 605,
+        "y": 700,
+        "w": 14,
+        "h": 10
+      }
+    },
+    {
+      "word": "Zz",
+      "confidence": 36.0,
+      "bbox": {
+        "x": 266,
+        "y": 704,
+        "w": 45,
+        "h": 19
+      }
+    },
+    {
+      "word": "ee",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 491,
+        "y": 702,
+        "w": 52,
+        "h": 20
+      }
+    },
+    {
+      "word": ":",
+      "confidence": 22.0,
+      "bbox": {
+        "x": 74,
+        "y": 734,
+        "w": 2,
+        "h": 3
+      }
+    },
+    {
+      "word": "fel(z|22",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 267,
+        "y": 725,
+        "w": 163,
+        "h": 17
+      }
+    },
+    {
+      "word": "wo2",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 155,
+        "y": 736,
+        "w": 45,
+        "h": 29
+      }
+    },
+    {
+      "word": "Z27)2|5",
+      "confidence": 19.0,
+      "bbox": {
+        "x": 267,
+        "y": 733,
+        "w": 125,
+        "h": 35
+      }
+    },
+    {
+      "word": ":",
+      "confidence": 41.0,
+      "bbox": {
+        "x": 74,
+        "y": 762,
+        "w": 2,
+        "h": 2
+      }
+    },
+    {
+      "word": "2",
+      "confidence": 39.0,
+      "bbox": {
+        "x": 183,
+        "y": 757,
+        "w": 16,
+        "h": 9
+      }
+    },
+    {
+      "word": "ss",
+      "confidence": 32.0,
+      "bbox": {
+        "x": 155,
+        "y": 761,
+        "w": 44,
+        "h": 18
+      }
+    },
+    {
+      "word": "#",
+      "confidence": 43.0,
+      "bbox": {
+        "x": 416,
+        "y": 760,
+        "w": 14,
+        "h": 18
+      }
+    },
+    {
+      "word": "ey",
+      "confidence": 41.0,
+      "bbox": {
+        "x": 760,
+        "y": 753,
+        "w": 65,
+        "h": 28
+      }
+    },
+    {
+      "word": "sz",
+      "confidence": 11.0,
+      "bbox": {
+        "x": 150,
+        "y": 781,
+        "w": 50,
+        "h": 20
+      }
+    },
+    {
+      "word": "g2/\"|/28",
+      "confidence": 12.0,
+      "bbox": {
+        "x": 267,
+        "y": 777,
+        "w": 164,
+        "h": 26
+      }
+    },
+    {
+      "word": "22",
+      "confidence": 35.0,
+      "bbox": {
+        "x": 494,
+        "y": 775,
+        "w": 52,
+        "h": 26
+      }
+    },
+    {
+      "word": "2",
+      "confidence": 35.0,
+      "bbox": {
+        "x": 762,
+        "y": 774,
+        "w": 13,
+        "h": 10
+      }
+    },
+    {
+      "word": "-",
+      "confidence": 36.0,
+      "bbox": {
+        "x": 763,
+        "y": 786,
+        "w": 12,
+        "h": 6
+      }
+    },
+    {
+      "word": "SE",
+      "confidence": 44.0,
+      "bbox": {
+        "x": 268,
+        "y": 805,
+        "w": 42,
+        "h": 17
+      }
+    },
+    {
+      "word": "3",
+      "confidence": 38.0,
+      "bbox": {
+        "x": 535,
+        "y": 822,
+        "w": 14,
+        "h": 10
+      }
+    },
+    {
+      "word": "2",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 155,
+        "y": 840,
+        "w": 43,
+        "h": 9
+      }
+    },
+    {
+      "word": "Ss",
+      "confidence": 31.0,
+      "bbox": {
+        "x": 269,
+        "y": 840,
+        "w": 42,
+        "h": 9
+      }
+    },
+    {
+      "word": "~*~",
+      "confidence": 27.0,
+      "bbox": {
+        "x": 541,
+        "y": 828,
+        "w": 15,
+        "h": 30
+      }
+    },
+    {
+      "word": "BZ",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 574,
+        "y": 832,
+        "w": 89,
+        "h": 17
+      }
+    },
+    {
+      "word": "cf",
+      "confidence": 37.0,
+      "bbox": {
+        "x": 155,
+        "y": 851,
+        "w": 44,
+        "h": 15
+      }
+    },
+    {
+      "word": "623284372822",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 380,
+        "y": 845,
+        "w": 324,
+        "h": 23
+      }
+    },
+    {
+      "word": "z=",
+      "confidence": 34.0,
+      "bbox": {
+        "x": 155,
+        "y": 864,
+        "w": 43,
+        "h": 23
+      }
+    },
+    {
+      "word": "S2e5e3o2232",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 381,
+        "y": 855,
+        "w": 216,
+        "h": 33
+      }
+    },
+    {
+      "word": "2522223",
+      "confidence": 1.0,
+      "bbox": {
+        "x": 381,
+        "y": 878,
+        "w": 362,
+        "h": 26
+      }
+    },
+    {
+      "word": "\u00a3",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 694,
+        "y": 874,
+        "w": 15,
+        "h": 34
+      }
+    },
+    {
+      "word": "2222",
+      "confidence": 15.0,
+      "bbox": {
+        "x": 421,
+        "y": 896,
+        "w": 245,
+        "h": 17
+      }
+    },
+    {
+      "word": "3",
+      "confidence": 30.0,
+      "bbox": {
+        "x": 697,
+        "y": 901,
+        "w": 6,
+        "h": 5
+      }
+    },
+    {
+      "word": "F",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 735,
+        "y": 900,
+        "w": 7,
+        "h": 5
+      }
+    },
+    {
+      "word": "=",
+      "confidence": 19.0,
+      "bbox": {
+        "x": 187,
+        "y": 918,
+        "w": 13,
+        "h": 3
+      }
+    },
+    {
+      "word": "Zig",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 382,
+        "y": 906,
+        "w": 92,
+        "h": 27
+      }
+    },
+    {
+      "word": "4223",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 505,
+        "y": 909,
+        "w": 236,
+        "h": 26
+      }
+    },
+    {
+      "word": "7%",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 655,
+        "y": 902,
+        "w": 19,
+        "h": 37
+      }
+    },
+    {
+      "word": "-",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 686,
+        "y": 902,
+        "w": 19,
+        "h": 37
+      }
+    },
+    {
+      "word": "zee",
+      "confidence": 40.0,
+      "bbox": {
+        "x": 383,
+        "y": 936,
+        "w": 91,
+        "h": 18
+      }
+    },
+    {
+      "word": "(\u201c",
+      "confidence": 27.0,
+      "bbox": {
+        "x": 106,
+        "y": 1065,
+        "w": 37,
+        "h": 43
+      }
+    },
+    {
+      "word": "os",
+      "confidence": 35.0,
+      "bbox": {
+        "x": 222,
+        "y": 1073,
+        "w": 12,
+        "h": 13
+      }
+    },
+    {
+      "word": "+",
+      "confidence": 31.0,
+      "bbox": {
+        "x": 394,
+        "y": 1072,
+        "w": 5,
+        "h": 4
+      }
+    },
+    {
+      "word": "Se",
+      "confidence": 19.0,
+      "bbox": {
+        "x": 477,
+        "y": 1064,
+        "w": 122,
+        "h": 17
+      }
+    },
+    {
+      "word": "tos",
+      "confidence": 6.0,
+      "bbox": {
+        "x": 675,
+        "y": 1060,
+        "w": 41,
+        "h": 30
+      }
+    },
+    {
+      "word": "a",
+      "confidence": 37.0,
+      "bbox": {
+        "x": 154,
+        "y": 1091,
+        "w": 17,
+        "h": 12
+      }
+    },
+    {
+      "word": "shone",
+      "confidence": 14.0,
+      "bbox": {
+        "x": 226,
+        "y": 1090,
+        "w": 59,
+        "h": 15
+      }
+    },
+    {
+      "word": "re",
+      "confidence": 9.0,
+      "bbox": {
+        "x": 438,
+        "y": 1082,
+        "w": 241,
+        "h": 22
+      }
+    },
+    {
+      "word": "ee",
+      "confidence": 15.0,
+      "bbox": {
+        "x": 713,
+        "y": 1087,
+        "w": 43,
+        "h": 5
+      }
+    },
+    {
+      "word": "1p",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 114,
+        "y": 1100,
+        "w": 73,
+        "h": 38
+      }
+    },
+    {
+      "word": "ip",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 213,
+        "y": 1107,
+        "w": 37,
+        "h": 29
+      }
+    },
+    {
+      "word": "a",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 548,
+        "y": 1106,
+        "w": 15,
+        "h": 12
+      }
+    },
+    {
+      "word": "rnaass",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 590,
+        "y": 1096,
+        "w": 168,
+        "h": 35
+      }
+    },
+    {
+      "word": "-",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 387,
+        "y": 1121,
+        "w": 14,
+        "h": 5
+      }
+    },
+    {
+      "word": ".",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 437,
+        "y": 1119,
+        "w": 4,
+        "h": 3
+      }
+    },
+    {
+      "word": "47",
+      "confidence": 31.0,
+      "bbox": {
+        "x": 471,
+        "y": 1111,
+        "w": 16,
+        "h": 23
+      }
+    },
+    {
+      "word": "ee",
+      "confidence": 22.0,
+      "bbox": {
+        "x": 585,
+        "y": 1111,
+        "w": 11,
+        "h": 22
+      }
+    },
+    {
+      "word": "OO",
+      "confidence": 37.0,
+      "bbox": {
+        "x": 629,
+        "y": 1118,
+        "w": 52,
+        "h": 8
+      }
+    },
+    {
+      "word": "c",
+      "confidence": 2.0,
+      "bbox": {
+        "x": 749,
+        "y": 1114,
+        "w": 10,
+        "h": 6
+      }
+    },
+    {
+      "word": "Me",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 119,
+        "y": 1115,
+        "w": 49,
+        "h": 33
+      }
+    },
+    {
+      "word": "Me,",
+      "confidence": 31.0,
+      "bbox": {
+        "x": 203,
+        "y": 1124,
+        "w": 34,
+        "h": 36
+      }
+    },
+    {
+      "word": "\u00e9",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 271,
+        "y": 1133,
+        "w": 12,
+        "h": 18
+      }
+    },
+    {
+      "word": "i",
+      "confidence": 7.0,
+      "bbox": {
+        "x": 387,
+        "y": 1131,
+        "w": 14,
+        "h": 17
+      }
+    },
+    {
+      "word": "rr",
+      "confidence": 12.0,
+      "bbox": {
+        "x": 430,
+        "y": 1149,
+        "w": 331,
+        "h": 28
+      }
+    }
+  ],
+  "confidence_score": 58.94,
+  "status": "FLAGGED",
+  "ocr_setup_notes": []
+}

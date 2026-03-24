@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { PIPELINE_STEPS } from "../pipelineData.js";
 import ThemeToggleButton from "../components/ThemeToggleButton.jsx";
 import ContactSection from "../components/ContactSection.jsx";
+import heroDocintel from "../assets/hero-docintel.svg";
 
 export default function LandingPage() {
   const { user, loading } = useAuth();
@@ -25,10 +26,13 @@ export default function LandingPage() {
     const hash = (location.hash || "").replace(/^#/, "");
     if (hash === "contact") {
       requestAnimationFrame(() => contactRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
+    } else if (hash === "pipeline") {
+      requestAnimationFrame(() => pipelineRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
     }
   }, [location.hash, location.pathname]);
 
   function goConsole() {
+    if (loading) return;
     if (user) navigate("/app");
     else navigate("/login");
   }
@@ -61,36 +65,54 @@ export default function LandingPage() {
 
             <ul className={`di-nav-links ${mobileOpen ? "di-nav-links--open" : ""}`}>
               <li>
-                <button type="button" onClick={() => pipelineRef.current?.scrollIntoView({ behavior: "smooth" })}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileOpen(false);
+                    pipelineRef.current?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
                   Pipeline
                 </button>
               </li>
               <li>
-                <Link to="/#contact" className="di-nav-link-a" onClick={() => setMobileOpen(false)}>
+                <Link to={{ pathname: "/", hash: "contact" }} className="di-nav-link-a" onClick={() => setMobileOpen(false)}>
                   Contact
                 </Link>
               </li>
               <li className="di-nav-sidebar" aria-hidden>
                 |
               </li>
-              <li>
-                <Link to="/login" className="di-nav-link-a" onClick={() => setMobileOpen(false)}>
-                  Sign in
-                </Link>
-              </li>
-              <li>
-                <Link to="/signup" className="di-nav-link-a" onClick={() => setMobileOpen(false)}>
-                  Create account
-                </Link>
-              </li>
+              {!loading && user ? (
+                <li>
+                  <Link to="/app" className="di-nav-link-a" onClick={() => setMobileOpen(false)}>
+                    Open console
+                  </Link>
+                </li>
+              ) : !loading ? (
+                <>
+                  <li>
+                    <Link to="/login" className="di-nav-link-a" onClick={() => setMobileOpen(false)}>
+                      Sign in
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/signup" className="di-nav-link-a" onClick={() => setMobileOpen(false)}>
+                      Create account
+                    </Link>
+                  </li>
+                </>
+              ) : null}
             </ul>
 
             <ThemeToggleButton />
 
-            <div className="di-nav-cta-wrap di-nav-cta-wrap--dual">
-              <button type="button" className="di-btn-nav-secondary" onClick={() => navigate("/login")}>
-                Sign in
-              </button>
+            <div className={`di-nav-cta-wrap ${user && !loading ? "di-nav-cta-wrap--single" : "di-nav-cta-wrap--dual"}`}>
+              {!user && !loading ? (
+                <button type="button" className="di-btn-nav-secondary" onClick={() => navigate("/login")}>
+                  Sign in
+                </button>
+              ) : null}
               <button type="button" className="di-btn-nav" onClick={goConsole}>
                 {loading ? "…" : user ? "Open console" : "Get started"}
               </button>
@@ -121,8 +143,8 @@ export default function LandingPage() {
               </p>
 
               <div className="di-hero-ctas">
-                <button type="button" className="di-btn-large di-btn-primary" onClick={goConsole}>
-                  {user ? "Open console" : "Get started free"}
+                <button type="button" className="di-btn-large di-btn-primary" onClick={goConsole} disabled={loading}>
+                  {loading ? "…" : user ? "Open console" : "Get started free"}
                 </button>
                 <button
                   type="button"
@@ -150,32 +172,16 @@ export default function LandingPage() {
 
             <div className="di-hero-visual" aria-hidden>
               <div className="di-visual-frame">
-                <div className="di-mock-browser">
-                  <div className="di-mock-bar">
-                    <span className="di-mock-dot" />
-                    <span className="di-mock-dot" />
-                    <span className="di-mock-dot" />
-                    <div className="di-mock-url">app.docintel.local / queue / flagged</div>
-                  </div>
-                  <div className="di-mock-body">
-                    <div className="di-flow">
-                      <div className="di-flow-row">
-                        <span className="di-flow-ic di-flow-ic--1">📄</span>
-                        <span>Scanned cheque ingested</span>
-                        <span className="di-flow-meta">OK</span>
-                      </div>
-                      <div className="di-flow-row">
-                        <span className="di-flow-ic di-flow-ic--2">⚙</span>
-                        <span>OCR + field parse (payee, date, amount)</span>
-                        <span className="di-flow-meta">Live</span>
-                      </div>
-                      <div className="di-flow-row">
-                        <span className="di-flow-ic di-flow-ic--3">✓</span>
-                        <span>Rules + anomaly layer + confidence</span>
-                        <span className="di-flow-meta">Score</span>
-                      </div>
-                    </div>
-                  </div>
+                <div className="di-hero-img-shell">
+                  <img
+                    src={heroDocintel}
+                    alt=""
+                    className="di-hero-main-img"
+                    width={920}
+                    height={580}
+                    decoding="async"
+                    fetchPriority="high"
+                  />
                 </div>
 
                 <div className="di-glass-float di-float-conf">
@@ -237,33 +243,72 @@ export default function LandingPage() {
         <div className="section-container di-landing-cta-inner">
           <div>
             <h2>Ready to run the pipeline?</h2>
-            <p>Sign in to upload documents, view the ops dashboard, and log reviewer feedback.</p>
+            <p>
+              {user
+                ? "You're signed in — open the console to upload documents and review runs."
+                : "Sign in to upload documents, view the ops dashboard, and log reviewer feedback."}
+            </p>
           </div>
-          <button type="button" className="di-btn-large di-btn-primary" onClick={goConsole}>
-            {user ? "Open console" : "Create account"}
+          <button type="button" className="di-btn-large di-btn-primary" onClick={goConsole} disabled={loading}>
+            {loading ? "…" : user ? "Open console" : "Create account"}
           </button>
         </div>
       </section>
 
-      <footer className="di-footer">
-        <div className="section-container di-footer-inner">
-          <div className="di-footer-brand">
-            <span className="di-footer-line">
-              <strong>DocIntel</strong> — FastAPI · OpenCV / PIL · Tesseract / Azure · pandas · scikit-learn · PyOD · React · Firebase
-            </span>
-            <span className="di-footer-tagline">Document control &amp; fraud-ops ready.</span>
+      <footer className="di-footer di-footer--marketing" aria-label="Site footer">
+        <div className="section-container">
+          <div className="di-footer-top">
+            <div className="di-footer-logo-block">
+              <div className="di-footer-logo">DocIntel</div>
+              <p className="di-footer-blurb">
+                Bank document intelligence — OCR, validation, anomalies, and ops dashboards. FastAPI · OpenCV ·
+                Tesseract · React · Firebase.
+              </p>
+            </div>
+            <div className="di-footer-columns">
+              <nav className="di-footer-col" aria-label="Product">
+                <h6 className="di-footer-col-title">Product</h6>
+                <Link to={{ pathname: "/", hash: "pipeline" }} className="di-footer-col-link">
+                  Pipeline
+                </Link>
+                <Link to={{ pathname: "/", hash: "contact" }} className="di-footer-col-link">
+                  Contact form
+                </Link>
+              </nav>
+              <nav className="di-footer-col" aria-label="Platform">
+                <h6 className="di-footer-col-title">Platform</h6>
+                {!loading && user ? (
+                  <Link to="/app" className="di-footer-col-link">
+                    Open console
+                  </Link>
+                ) : !loading ? (
+                  <>
+                    <Link to="/login" className="di-footer-col-link">
+                      Sign in
+                    </Link>
+                    <Link to="/signup" className="di-footer-col-link">
+                      Create account
+                    </Link>
+                  </>
+                ) : null}
+              </nav>
+              <div className="di-footer-col">
+                <h6 className="di-footer-col-title">Questions &amp; support</h6>
+                <a href="mailto:mpraharshitha2006@gmail.com" className="di-footer-col-link di-footer-col-link--email">
+                  mpraharshitha2006@gmail.com
+                </a>
+                <p className="di-footer-col-note">Reach out for product questions, access, or technical help.</p>
+              </div>
+            </div>
           </div>
-          <nav className="di-footer-nav" aria-label="Footer">
-            <Link to="/#contact" className="di-footer-link">
-              Contact
-            </Link>
-            <Link to="/login" className="di-footer-link">
-              Sign in
-            </Link>
-            <Link to="/signup" className="di-footer-link">
-              Create account
-            </Link>
-          </nav>
+          <div className="di-footer-bottom">
+            <span className="di-footer-copy">© {new Date().getFullYear()} DocIntel. All rights reserved.</span>
+            <nav className="di-footer-bottom-nav" aria-label="Footer legal">
+              <Link to={{ pathname: "/", hash: "contact" }} className="di-footer-bottom-link">
+                Contact
+              </Link>
+            </nav>
+          </div>
         </div>
       </footer>
     </div>

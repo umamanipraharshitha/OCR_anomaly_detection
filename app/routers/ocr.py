@@ -1,12 +1,10 @@
-from pathlib import Path
 from typing import Any, Dict
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 
-from app.services.ocr_service import analyze_document, dashboard_metrics, save_feedback
+from app.services.ocr_service import UPLOAD_DIR, analyze_document, dashboard_metrics, save_feedback
 
 router = APIRouter(prefix="/pipeline", tags=["Document Intelligence Pipeline"])
-UPLOAD_DIR = Path("uploads")
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 

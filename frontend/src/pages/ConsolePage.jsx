@@ -159,7 +159,7 @@ export default function ConsolePage() {
 
             <ul className={`di-nav-links ${mobileNavOpen ? "di-nav-links--open" : ""}`}>
               <li>
-                <Link to="/#pipeline" className="di-nav-link-a" onClick={() => setMobileNavOpen(false)}>
+                <Link to={{ pathname: "/", hash: "pipeline" }} className="di-nav-link-a" onClick={() => setMobileNavOpen(false)}>
                   Pipeline
                 </Link>
               </li>
@@ -356,11 +356,7 @@ export default function ConsolePage() {
                         <p className="di-card-meta">Missing: {result.validation.missing_fields.join(", ")}</p>
                       ) : null}
                       {result.validation?.format_errors?.length ? (
-                        <ul className="di-list">
-                          {result.validation.format_errors.map((x, i) => (
-                            <li key={i}>{x}</li>
-                          ))}
-                        </ul>
+                        <p className="di-card-meta">Issues: {result.validation.format_errors.join(", ")}</p>
                       ) : null}
                     </div>
                   </div>
@@ -393,7 +389,13 @@ export default function ConsolePage() {
                 <div>
                   <h2 id="dash-heading">Operations dashboard</h2>
                   <p className="di-panel-sub">
-                    Throughput and quality KPIs from persisted runs in <code>output/*.json</code>.
+                    Throughput and quality KPIs from JSON written by the API (one file per document id).
+                    {dash?.output_dir ? (
+                      <>
+                        {" "}
+                        Server path: <code className="di-mono-path">{dash.output_dir}</code>
+                      </>
+                    ) : null}
                   </p>
                 </div>
                 <button type="button" className="di-btn-secondary" onClick={loadDashboard} disabled={dashLoading}>
@@ -519,17 +521,20 @@ export default function ConsolePage() {
         </div>
       </section>
 
-      <footer className="di-footer">
-        <div className="section-container di-footer-inner">
-          <span>
+      <footer className="di-footer di-footer--compact" aria-label="Console footer">
+        <div className="section-container di-footer-compact-inner">
+          <span className="di-footer-compact-meta">
             <strong>DocIntel</strong> console — authenticated via Firebase
           </span>
-          <nav className="di-footer-nav" aria-label="Console footer">
-            <Link to="/#contact" className="di-footer-link">
+          <nav className="di-footer-compact-nav" aria-label="Console footer links">
+            <Link to={{ pathname: "/", hash: "contact" }} className="di-footer-bottom-link">
               Contact
             </Link>
-            <Link to="/" className="di-footer-link">
-              Back to marketing site
+            <a href="mailto:mpraharshitha2006@gmail.com" className="di-footer-bottom-link">
+              mpraharshitha2006@gmail.com
+            </a>
+            <Link to="/" className="di-footer-bottom-link">
+              Marketing site
             </Link>
           </nav>
         </div>

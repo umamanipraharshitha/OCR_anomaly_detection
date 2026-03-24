@@ -17,13 +17,15 @@ import numpy as np
 import pandas as pd
 import pytesseract
 import requests
-from PIL import Image
+from PIL import Image, ImageOps
 from pyod.models.iforest import IForest
 from pypdf import PdfReader
 from sklearn.ensemble import IsolationForest
 
-UPLOAD_DIR = Path("uploads")
-OUTPUT_DIR = Path("output")
+# Resolve next to project root (parent of `app/`) so dashboard & uploads work regardless of CWD.
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+UPLOAD_DIR = PROJECT_ROOT / "uploads"
+OUTPUT_DIR = PROJECT_ROOT / "output"
 FEEDBACK_FILE = OUTPUT_DIR / "feedback.jsonl"
 
 DATE_REGEX = (
@@ -81,9 +83,66 @@ def _configure_tesseract() -> bool:
     return False
 
 
+def _osd_correct_rotation_gray(gray: np.ndarray) -> np.ndarray:
+    """
+    Use Tesseract orientation script (OSD) to fix 90° / 180° / 270° rotations.
+    Requires osd trained data; on failure returns the input unchanged.
+    """
+    if not _configure_tesseract():
+        return gray
+    h, w = gray.shape[:2]
+    small = gray
+    max_dim = 1400
+    if max(h, w) > max_dim:
+        scale = max_dim / max(h, w)
+        nw, nh = int(w * scale), int(h * scale)
+        small = cv2.resize(gray, (nw, nh), interpolation=cv2.INTER_AREA)
+    try:
+        osd = pytesseract.image_to_osd(small, config="--psm 0")
+    except Exception:
+        return gray
+    m = re.search(r"Rotate:\s*(\d+)", osd)
+    if not m:
+        return gray
+    rot = int(m.group(1))
+    if rot == 0:
+        return gray
+    if rot == 90:
+        return cv2.rotate(gray, cv2.ROTATE_90_CLOCKWISE)
+    if rot == 180:
+        return cv2.rotate(gray, cv2.ROTATE_180)
+    if rot == 270:
+        return cv2.rotate(gray, cv2.ROTATE_90_COUNTERCLOCKWISE)
+    return gray
+
+
+def _deskew_gray(gray: np.ndarray, max_angle: float = 15.0) -> np.ndarray:
+    """Correct small skew from scanned / tilted pages (fine rotation)."""
+    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    coords = cv2.findNonZero(thresh)
+    if coords is None or len(coords) < 40:
+        return gray
+    rect = cv2.minAreaRect(coords)
+    angle = float(rect[-1])
+    if angle < -45:
+        angle = 90.0 + angle
+    elif angle > 45:
+        angle = angle - 90.0
+    if abs(angle) < 0.15 or abs(angle) > max_angle:
+        return gray
+    h, w = gray.shape[:2]
+    center = (w // 2, h // 2)
+    m = cv2.getRotationMatrix2D(center, angle, 1.0)
+    return cv2.warpAffine(gray, m, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+
+
 def preprocess_image(raw_bytes: bytes) -> np.ndarray:
-    """OpenCV + PIL preprocessing: denoise, deskew, threshold, resize."""
+    """EXIF upright → resize → denoise → OSD page rotation → deskew → adaptive threshold."""
     pil_image = Image.open(io.BytesIO(raw_bytes)).convert("RGB")
+    try:
+        pil_image = ImageOps.exif_transpose(pil_image)
+    except Exception:
+        pass
     pil_image = pil_image.resize(
         (max(900, pil_image.width), max(1200, pil_image.height)),
         Image.Resampling.LANCZOS,
@@ -91,8 +150,10 @@ def preprocess_image(raw_bytes: bytes) -> np.ndarray:
     image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     denoised = cv2.fastNlMeansDenoising(gray, h=15)
+    oriented = _osd_correct_rotation_gray(denoised)
+    deskewed = _deskew_gray(oriented)
     thresh = cv2.adaptiveThreshold(
-        denoised, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 12
+        deskewed, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 12
     )
     return thresh
 
@@ -183,6 +244,14 @@ def _extract_from_pdf(pdf_bytes: bytes) -> str:
     for page in reader.pages:
         chunks.append(page.extract_text() or "")
     return "\n".join(chunks)
+
+
+def _text_for_display(raw: str) -> str:
+    """Human-readable OCR view: tokens separated by comma + space (extraction still uses raw spacing)."""
+    if not (raw or "").strip():
+        return ""
+    parts = [p for p in re.split(r"\s+", raw.strip()) if p]
+    return ", ".join(parts)
 
 
 def _extract_fields(text: str) -> Dict[str, Any]:
@@ -280,7 +349,8 @@ def _generate_dashboard_charts(frame: pd.DataFrame) -> Dict[str, str]:
 
     pie_fig, pie_ax = plt.subplots(figsize=(4.8, 3.6), facecolor="#0b1220")
     pie_ax.set_facecolor("#0b1220")
-    wedges, _ = pie_ax.pie(
+    # Matplotlib 3.8+ returns (wedges, texts, autotexts) when autopct is set — not 2 values.
+    pie_result = pie_ax.pie(
         [max(ok_count, 0), max(flagged_count, 0)],
         labels=["OK", "FLAGGED"],
         colors=["#10b981", "#ef4444"],
@@ -288,6 +358,7 @@ def _generate_dashboard_charts(frame: pd.DataFrame) -> Dict[str, str]:
         startangle=140,
         textprops={"color": "#e5e7eb", "fontsize": 9},
     )
+    wedges = pie_result[0]
     for wedge in wedges:
         wedge.set_linewidth(1.0)
         wedge.set_edgecolor("#0f172a")
@@ -329,9 +400,10 @@ def analyze_document(doc_id: str, filename: str, raw_bytes: bytes) -> Dict[str, 
         azure_result = _azure_ocr(png_bytes.tobytes())
         ocr_result = azure_result or _pytesseract_ocr(pre)
 
-    fields = _extract_fields(ocr_result.text)
+    raw_text = ocr_result.text
+    fields = _extract_fields(raw_text)
     validation = _rule_validation(fields)
-    anomaly = _anomaly_scores(ocr_result.text, fields, ocr_result.avg_confidence)
+    anomaly = _anomaly_scores(raw_text, fields, ocr_result.avg_confidence)
     confidence = _confidence_score(ocr_result.avg_confidence, validation, anomaly)
 
     setup_notes: List[str] = []
@@ -343,7 +415,7 @@ def analyze_document(doc_id: str, filename: str, raw_bytes: bytes) -> Dict[str, 
         setup_notes.append(
             "Windows installer (UB Mannheim): https://github.com/UB-Mannheim/tesseract/wiki"
         )
-    elif not (ocr_result.text or "").strip() and ext in ("png", "jpg", "jpeg", "webp", "tif", "tiff", "bmp"):
+    elif not (raw_text or "").strip() and ext in ("png", "jpg", "jpeg", "webp", "tif", "tiff", "bmp"):
         setup_notes.append(
             "No text was extracted — try a higher-contrast scan, or install/configure Tesseract / Azure OCR."
         )
@@ -353,7 +425,7 @@ def analyze_document(doc_id: str, filename: str, raw_bytes: bytes) -> Dict[str, 
         "filename": filename,
         "timestamp": datetime.utcnow().isoformat() + "Z",
         "ocr_provider": ocr_result.provider,
-        "text": ocr_result.text,
+        "text": _text_for_display(raw_text),
         "fields": fields,
         "validation": validation,
         "anomaly": anomaly,
@@ -391,8 +463,16 @@ def dashboard_metrics() -> Dict[str, Any]:
         with open(file, "r", encoding="utf-8") as f:
             docs.append(json.load(f))
 
+    out_resolved = str(OUTPUT_DIR.resolve())
     if not docs:
-        return {"documents": 0, "flagged": 0, "avg_confidence": 0.0, "recent": [], "charts": {}}
+        return {
+            "documents": 0,
+            "flagged": 0,
+            "avg_confidence": 0.0,
+            "recent": [],
+            "charts": {},
+            "output_dir": out_resolved,
+        }
 
     frame = pd.DataFrame(
         [{"doc_id": d["doc_id"], "status": d["status"], "confidence_score": d["confidence_score"]} for d in docs]
@@ -400,12 +480,17 @@ def dashboard_metrics() -> Dict[str, Any]:
     flagged = int((frame["status"] == "FLAGGED").sum())
     avg_conf = round(float(frame["confidence_score"].mean()), 2)
     recent = sorted(docs, key=lambda x: x["timestamp"], reverse=True)[:5]
-    charts = _generate_dashboard_charts(frame)
+    charts: Dict[str, str] = {}
+    try:
+        charts = _generate_dashboard_charts(frame)
+    except Exception:
+        pass
     return {
         "documents": int(len(docs)),
         "flagged": flagged,
         "avg_confidence": avg_conf,
         "charts": charts,
+        "output_dir": out_resolved,
         "recent": [
             {"doc_id": d["doc_id"], "filename": d["filename"], "status": d["status"], "confidence_score": d["confidence_score"]}
             for d in recent

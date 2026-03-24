@@ -42,7 +42,9 @@ Firebase config defaults live in `frontend/src/firebase.js`. Override with `VITE
 
 In the [Firebase Console](https://console.firebase.google.com/) for your project, enable **Authentication → Sign-in method**: Email/Password and Google, and add **Authorized domains** (e.g. `localhost`) for web sign-in.
 
-Enable **Firestore** for the **Contact** section on the landing page: messages are written to the collection `docintel_contact_messages` (no `mailto:` links or support addresses in the UI). Example rules that allow anyone to submit a message but not read the inbox from clients:
+**Contact form:** By default the app sends mail through **EmailJS** using the same pattern as Aplora (`emailjs.send(serviceId, templateId, { name, email, message }, publicKey)`). Your EmailJS template should define **`{{name}}`**, **`{{email}}`**, and **`{{message}}`**. Optional env overrides in `frontend/.env`: `VITE_EMAILJS_SERVICE_ID`, `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY`. Set **`VITE_EMAILJS_DISABLED=1`** to use **Firestore** only instead of EmailJS.
+
+If you use the Firestore fallback, enable **Firestore** and the collection `docintel_contact_messages`. Example rules:
 
 ```text
 rules_version = '2';

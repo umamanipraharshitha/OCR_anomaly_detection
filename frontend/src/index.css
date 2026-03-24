@@ -87,6 +87,10 @@ body {
   color: var(--primary);
 }
 
+:root[data-theme="dark"] ::selection {
+  color: #0f172a;
+}
+
 button,
 input,
 textarea {

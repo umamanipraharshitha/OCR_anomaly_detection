@@ -1,0 +1,127 @@
+{
+  "doc_id": "doc-mn53pebz",
+  "filename": "hostel fee method.jpg",
+  "timestamp": "2026-03-24T21:05:34.862189Z",
+  "ocr_provider": "pytesseract",
+  "text": "TO PAY THE HOSTEL LEE GO THROUGH THE FOLLOWING LINK . _ WWW.ONLINE SBIL.COM > , SB COLLECT TAB - CLASSIC VERSION PUT TICK MARK IN TERMS & CONDITIONS BOX & CLICK ON PROCEED > SELECT STATE (AP),-> TYPE OF INSTITUTION (:DUCATIONAL)> jl SELECT JNTUUCEK HOSTEL FEE -> FILL PARTICULARS AND SUBMIT FE FORM & PAY THE RELEVANT FEE - . | MN! 4, | 7 ne Bg | \u2018",
+  "fields": {
+    "name": null,
+    "date": null,
+    "amount": 4.0
+  },
+  "validation": {
+    "passed": false,
+    "missing_fields": [
+      "name",
+      "date"
+    ],
+    "format_errors": []
+  },
+  "anomaly": {
+    "is_anomaly": true,
+    "sklearn_score": -0.01659841851638655,
+    "pyod_outlier": true,
+    "feature_vector": {
+      "text_length": 348,
+      "word_count": 70,
+      "amount": 4.0,
+      "ocr_confidence": 0.7664285714285713
+    }
+  },
+  "ocr_confidence": 0.7664,
+  "low_confidence_words": [
+    {
+      "word": "SBIL.COM",
+      "confidence": 32.0,
+      "bbox": {
+        "x": 460,
+        "y": 216,
+        "w": 143,
+        "h": 25
+      }
+    },
+    {
+      "word": ",",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 760,
+        "y": 195,
+        "w": 7,
+        "h": 6
+      }
+    },
+    {
+      "word": "(:DUCATIONAL)>",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 480,
+        "y": 557,
+        "w": 272,
+        "h": 52
+      }
+    },
+    {
+      "word": "jl",
+      "confidence": 26.0,
+      "bbox": {
+        "x": 878,
+        "y": 590,
+        "w": 2,
+        "h": 16
+      }
+    },
+    {
+      "word": "FE",
+      "confidence": 29.0,
+      "bbox": {
+        "x": 667,
+        "y": 709,
+        "w": 52,
+        "h": 22
+      }
+    },
+    {
+      "word": "-",
+      "confidence": 19.0,
+      "bbox": {
+        "x": 19,
+        "y": 947,
+        "w": 25,
+        "h": 16
+      }
+    },
+    {
+      "word": "MN!",
+      "confidence": 30.0,
+      "bbox": {
+        "x": 31,
+        "y": 1058,
+        "w": 55,
+        "h": 60
+      }
+    },
+    {
+      "word": "4,",
+      "confidence": 19.0,
+      "bbox": {
+        "x": 614,
+        "y": 1057,
+        "w": 22,
+        "h": 36
+      }
+    },
+    {
+      "word": "ne",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 283,
+        "y": 1129,
+        "w": 53,
+        "h": 28
+      }
+    }
+  ],
+  "confidence_score": 64.49,
+  "status": "FLAGGED",
+  "ocr_setup_notes": []
+}

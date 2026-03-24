@@ -1,0 +1,40 @@
+{
+  "doc_id": "doc-mn5149zv",
+  "filename": "29.04.2025_20.31.50_REC.png",
+  "timestamp": "2026-03-24T19:50:22.603335Z",
+  "ocr_provider": "pytesseract_not_installed",
+  "text": "",
+  "fields": {
+    "name": null,
+    "date": null,
+    "amount": null
+  },
+  "validation": {
+    "passed": false,
+    "missing_fields": [
+      "name",
+      "date",
+      "amount"
+    ],
+    "format_errors": []
+  },
+  "anomaly": {
+    "is_anomaly": true,
+    "sklearn_score": -0.01659841851638655,
+    "pyod_outlier": true,
+    "feature_vector": {
+      "text_length": 0,
+      "word_count": 0,
+      "amount": 0.0,
+      "ocr_confidence": 0.0
+    }
+  },
+  "ocr_confidence": 0.0,
+  "low_confidence_words": [],
+  "confidence_score": 18.75,
+  "status": "FLAGGED",
+  "ocr_setup_notes": [
+    "Tesseract OCR is not installed or not found. Install it and add to PATH, or set environment variable TESSERACT_CMD to the full path of tesseract.exe",
+    "Windows installer (UB Mannheim): https://github.com/UB-Mannheim/tesseract/wiki"
+  ]
+}

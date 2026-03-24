@@ -1,0 +1,36 @@
+{
+  "doc_id": "demo001",
+  "filename": "demo.png",
+  "timestamp": "2026-03-24T19:37:57.278250Z",
+  "ocr_provider": "pytesseract_not_installed",
+  "text": "",
+  "fields": {
+    "name": null,
+    "date": null,
+    "amount": null
+  },
+  "validation": {
+    "passed": false,
+    "missing_fields": [
+      "name",
+      "date",
+      "amount"
+    ],
+    "format_errors": []
+  },
+  "anomaly": {
+    "is_anomaly": true,
+    "sklearn_score": -0.01659841851638655,
+    "pyod_outlier": true,
+    "feature_vector": {
+      "text_length": 0,
+      "word_count": 0,
+      "amount": 0.0,
+      "ocr_confidence": 0.0
+    }
+  },
+  "ocr_confidence": 0.0,
+  "low_confidence_words": [],
+  "confidence_score": 18.75,
+  "status": "FLAGGED"
+}

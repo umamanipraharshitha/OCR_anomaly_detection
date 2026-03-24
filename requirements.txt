@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+python-multipart
+pypdf
+opencv-python
+Pillow
+numpy
+pandas
+pytesseract
+scikit-learn
+pyod
+requests
+matplotlib

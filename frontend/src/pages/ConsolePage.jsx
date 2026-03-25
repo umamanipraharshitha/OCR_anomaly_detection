@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { analyzeDocument, fetchDashboard, submitFeedback } from "../api.js";
+import { analyzeDocument, fetchDashboard, fetchMlEvaluation, submitFeedback } from "../api.js";
+
+const ADMIN_EMAIL = "mpraharshitha2006@gmail.com";
 import { useAuth } from "../context/AuthContext.jsx";
 import ThemeToggleButton from "../components/ThemeToggleButton.jsx";
 import "../App.css";
@@ -41,6 +43,10 @@ export default function ConsolePage() {
 
   const [dash, setDash] = useState(null);
   const [dashLoading, setDashLoading] = useState(false);
+  const [mlEval, setMlEval] = useState(null);
+  const [mlEvalLoading, setMlEvalLoading] = useState(false);
+
+  const isAdmin = (user?.email || "").toLowerCase() === ADMIN_EMAIL;
 
   const [fbDocId, setFbDocId] = useState("");
   const [reviewer, setReviewer] = useState(user?.displayName || "");
@@ -54,17 +60,35 @@ export default function ConsolePage() {
   }, [user, reviewer]);
 
   const loadDashboard = useCallback(async () => {
+    if (!user?.email) {
+      setError("Signed-in email is required to load analytics.");
+      return;
+    }
     setDashLoading(true);
     setError(null);
     try {
-      const data = await fetchDashboard();
+      const data = await fetchDashboard(user.email);
       setDash(data);
     } catch (e) {
       setError(e.message);
+      setDash(null);
     } finally {
       setDashLoading(false);
     }
-  }, []);
+  }, [user?.email]);
+
+  const loadMlEvaluation = useCallback(async () => {
+    if (!user?.email || !isAdmin) return;
+    setMlEvalLoading(true);
+    try {
+      const data = await fetchMlEvaluation(user.email);
+      setMlEval(data);
+    } catch {
+      setMlEval(null);
+    } finally {
+      setMlEvalLoading(false);
+    }
+  }, [user?.email, isAdmin]);
 
   useEffect(() => {
     const onScroll = () => setNavScrolled(window.scrollY > 12);
@@ -74,9 +98,17 @@ export default function ConsolePage() {
   }, []);
 
   useEffect(() => {
+    if (!isAdmin && tab === "dashboard") {
+      setTab("analyze");
+    }
+  }, [isAdmin, tab]);
+
+  useEffect(() => {
     setError(null);
-    if (tab === "dashboard") loadDashboard();
-  }, [tab, loadDashboard]);
+    if (tab !== "dashboard" || !isAdmin) return;
+    loadDashboard();
+    loadMlEvaluation();
+  }, [tab, isAdmin, loadDashboard, loadMlEvaluation]);
 
   function openWorkspace(nextTab) {
     setTab(nextTab);
@@ -114,14 +146,18 @@ export default function ConsolePage() {
     }
     setFbStatus({ type: "pending" });
     try {
-      await submitFeedback({
+      const res = await submitFeedback({
         doc_id: fbDocId.trim(),
         reviewer: reviewer.trim(),
         corrected_name: fbName,
         corrected_date: fbDate,
         corrected_amount: fbAmount,
       });
-      setFbStatus({ type: "ok", text: "Corrections saved for the feedback loop." });
+      const extra =
+        res.applied && res.document
+          ? ` Status: ${res.document.status}, confidence ${res.document.confidence_score}%.`
+          : "";
+      setFbStatus({ type: "ok", text: (res.message || "Saved.") + extra });
     } catch (e) {
       setFbStatus({ type: "err", text: e.message });
     }
@@ -171,11 +207,13 @@ export default function ConsolePage() {
                   Ingest
                 </button>
               </li>
-              <li>
-                <button type="button" aria-current={tab === "dashboard" ? "true" : undefined} onClick={() => openWorkspace("dashboard")}>
-                  Dashboard
-                </button>
-              </li>
+              {isAdmin ? (
+                <li>
+                  <button type="button" aria-current={tab === "dashboard" ? "true" : undefined} onClick={() => openWorkspace("dashboard")}>
+                    Dashboard
+                  </button>
+                </li>
+              ) : null}
               <li>
                 <button type="button" aria-current={tab === "feedback" ? "true" : undefined} onClick={() => openWorkspace("feedback")}>
                   Review
@@ -214,9 +252,11 @@ export default function ConsolePage() {
             <button type="button" className="di-btn-large di-btn-primary" onClick={() => openWorkspace("analyze")}>
               New analysis
             </button>
-            <button type="button" className="di-btn-large di-btn-ghost" onClick={() => openWorkspace("dashboard")}>
-              View metrics
-            </button>
+            {isAdmin ? (
+              <button type="button" className="di-btn-large di-btn-ghost" onClick={() => openWorkspace("dashboard")}>
+                View metrics
+              </button>
+            ) : null}
           </div>
         </div>
       </section>
@@ -383,13 +423,14 @@ export default function ConsolePage() {
             </div>
           )}
 
-          {tab === "dashboard" && (
+          {tab === "dashboard" && isAdmin && (
             <div className="di-panel" aria-labelledby="dash-heading">
               <div className="di-panel-head di-panel-head-row">
                 <div>
-                  <h2 id="dash-heading">Operations dashboard</h2>
+                  <h2 id="dash-heading">Operations dashboard (admin)</h2>
                   <p className="di-panel-sub">
-                    Throughput and quality KPIs from JSON written by the API (one file per document id).
+                    Throughput and quality KPIs from JSON written by the API (one file per document id). This view is only available to{" "}
+                    <strong>{ADMIN_EMAIL}</strong>.
                     {dash?.output_dir ? (
                       <>
                         {" "}
@@ -398,7 +439,15 @@ export default function ConsolePage() {
                     ) : null}
                   </p>
                 </div>
-                <button type="button" className="di-btn-secondary" onClick={loadDashboard} disabled={dashLoading}>
+                <button
+                  type="button"
+                  className="di-btn-secondary"
+                  onClick={() => {
+                    loadDashboard();
+                    loadMlEvaluation();
+                  }}
+                  disabled={dashLoading}
+                >
                   {dashLoading ? "Refreshing…" : "Refresh metrics"}
                 </button>
               </div>
@@ -459,6 +508,22 @@ export default function ConsolePage() {
                   </div>
                 </>
               )}
+
+              <div className="di-card di-card--full" style={{ marginTop: "1.5rem" }}>
+                <h4>API-trained model — evaluation</h4>
+                <p className="di-panel-sub" style={{ marginTop: 0 }}>
+                  Holdout metrics from <code>POST /ml/train-from-api</code> (saved under <code>models/</code>). Training endpoints require the same admin header.
+                </p>
+                {mlEvalLoading ? <p className="di-empty">Loading evaluation…</p> : null}
+                {!mlEvalLoading && mlEval?.evaluation ? (
+                  <pre className="di-pre" style={{ maxHeight: "22rem", overflow: "auto" }}>
+                    {JSON.stringify(mlEval, null, 2)}
+                  </pre>
+                ) : null}
+                {!mlEvalLoading && !mlEval?.evaluation ? (
+                  <p className="di-empty">No training run on record yet. After you train, metrics appear here (admin only).</p>
+                ) : null}
+              </div>
             </div>
           )}
 

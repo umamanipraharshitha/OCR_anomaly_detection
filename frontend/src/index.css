@@ -1,31 +1,40 @@
 :root {
-  --aplora-blue: #0070f3;
-  --aplora-purple: #7928ca;
-  --primary: #000000;
-  --secondary: #666666;
+  --aplora-blue: #4989d3;
+  --aplora-purple: #b288dc;
+
+  /* Light mode: white base with radiant blue accents */
+  --primary: #0b1020;
+  --secondary: #576076;
   --background: #ffffff;
-  --foreground: #000000;
+  --foreground: #0b1020;
   --selection: #ffdd00;
+
+  /* Radiant blue for light mode */
+  --radiant-blue: #00aaff;
+  --radiant-blue-soft: rgba(0, 170, 255, 0.12);
+  --radiant-blue-strong: rgba(0, 170, 255, 0.35);
+
   --glass: rgba(255, 255, 255, 0.7);
   --glass-border: rgba(0, 0, 0, 0.08);
   --font-main: "Inter", system-ui, sans-serif;
   --font-heading: "Plus Jakarta Sans", system-ui, sans-serif;
 
-  /* DocIntel theme tokens (Aplora-inspired) */
+  /* DocIntel theme tokens (Aplora-inspired, light mode) */
   --di-bg: #ffffff;
   --di-surface: #ffffff;
-  --di-bg-soft: #fafafa;
+  --di-bg-soft: #f5f9ff; /* very light blue tint */
   --di-text: #0b1020;
   --di-muted: #6b7280;
   --di-border: rgba(0, 0, 0, 0.08);
   --di-border-strong: rgba(0, 0, 0, 0.12);
-  --di-nav-bg: rgba(255, 255, 255, 0.82);
-  --di-table-header: #fafafa;
+  --di-nav-bg: rgba(255, 255, 255, 0.88);
+  --di-table-header: #f7f9ff;
   --di-card-bg: #ffffff;
   --di-code-bg: rgba(0, 0, 0, 0.06);
   --di-ring-rest: rgba(0, 0, 0, 0.08);
 
-  --auth-page-bg: linear-gradient(180deg, #f8fafc 0%, #ffffff 45%);
+  /* Auth page: white with radiant blue glow */
+  --auth-page-bg: radial-gradient(120% 80% at 50% -10%, var(--radiant-blue-soft), transparent 55%), #ffffff;
   --auth-container-bg: #ffffff;
   --auth-container-shadow: 0 40px 100px -20px rgba(15, 23, 42, 0.12);
   --auth-error-bg: rgba(239, 68, 68, 0.08);
@@ -34,28 +43,36 @@
 }
 
 :root[data-theme="dark"] {
-  --primary: #f8fafc;
-  --secondary: #94a3b8;
-  --background: #070a0f;
-  --foreground: #f1f5f9;
+  /* Dark mode: darkish-blue → black base with radiant blue accents */
+  --primary: #eef4ff;
+  --secondary: #9aa9c4;
+  --background: #04080f; /* very dark, near-black */
+  --foreground: #eef4ff;
   --selection: #facc15;
 
-  --di-bg: #070a0f;
-  --di-surface: #0f1419;
-  --di-bg-soft: #151c28;
-  --di-text: #f1f5f9;
-  --di-muted: #94a3b8;
-  --di-border: rgba(148, 163, 184, 0.14);
-  --di-border-strong: rgba(148, 163, 184, 0.22);
-  --di-nav-bg: rgba(7, 10, 15, 0.88);
-  --di-table-header: rgba(15, 20, 25, 0.95);
-  --di-card-bg: #0f1419;
-  --di-code-bg: rgba(148, 163, 184, 0.12);
-  --di-ring-rest: rgba(148, 163, 184, 0.18);
+  /* Radiant blue for dark mode (more vibrant) */
+  --radiant-blue: #00d4ff;
+  --radiant-blue-soft: rgba(0, 212, 255, 0.10);
+  --radiant-blue-strong: rgba(0, 212, 255, 0.35);
 
-  --auth-page-bg: radial-gradient(120% 80% at 50% -10%, rgba(0, 112, 243, 0.12), transparent 55%), #070a0f;
-  --auth-container-bg: #0f1419;
-  --auth-container-shadow: 0 40px 100px -24px rgba(0, 0, 0, 0.65);
+  /* Darkish-blue to black gradient via surface tones */
+  --di-bg: #04080f;
+  --di-surface: #0a1220; /* darkish blue */
+  --di-bg-soft: #0d1526; /* slightly lighter dark blue */
+  --di-text: #eef4ff;
+  --di-muted: #9aa9c4;
+  --di-border: rgba(150, 180, 230, 0.12);
+  --di-border-strong: rgba(150, 180, 230, 0.22);
+  --di-nav-bg: rgba(4, 8, 15, 0.88);
+  --di-table-header: rgba(10, 18, 32, 0.95);
+  --di-card-bg: #0a1220;
+  --di-code-bg: rgba(0, 212, 255, 0.08);
+  --di-ring-rest: rgba(0, 212, 255, 0.18);
+
+  /* Auth page: darkish-blue → black with radiant blue glow */
+  --auth-page-bg: radial-gradient(120% 80% at 50% -10%, var(--radiant-blue-soft), transparent 55%), linear-gradient(180deg, #0a1220 0%, #04080f 60%);
+  --auth-container-bg: #0a1220;
+  --auth-container-shadow: 0 40px 100px -24px rgba(0, 0, 0, 0.7), 0 0 60px rgba(0, 212, 255, 0.08);
   --auth-error-bg: rgba(248, 113, 113, 0.12);
   --auth-error-fg: #fecaca;
   --auth-error-border: rgba(248, 113, 113, 0.35);

@@ -8,6 +8,7 @@ numpy
 pandas
 pytesseract
 scikit-learn
+joblib
 pyod
 requests
 matplotlib

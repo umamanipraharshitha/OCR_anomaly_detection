@@ -1,0 +1,18 @@
+{
+  "model_path": "C:\\Users\\mprah\\ctf\\models\\api_trained_model.pkl",
+  "task": "classification",
+  "n_rows": 100,
+  "n_train": 80,
+  "n_test": 20,
+  "metrics": {
+    "accuracy": 0.85,
+    "precision_macro": 0.8535353535353536,
+    "recall_macro": 0.8500000000000001,
+    "f1_macro": 0.849624060150376,
+    "precision_weighted": 0.8535353535353536,
+    "recall_weighted": 0.85,
+    "f1_weighted": 0.849624060150376,
+    "n_classes": 2,
+    "roc_auc": 0.89
+  }
+}

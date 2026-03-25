@@ -22,12 +22,13 @@ from pyod.models.iforest import IForest
 from pypdf import PdfReader
 from sklearn.ensemble import IsolationForest
 
-# Resolve next to project root (parent of `app/`) so dashboard & uploads work regardless of CWD.
+# Paths (Keep these)
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 UPLOAD_DIR = PROJECT_ROOT / "uploads"
 OUTPUT_DIR = PROJECT_ROOT / "output"
 FEEDBACK_FILE = OUTPUT_DIR / "feedback.jsonl"
 
+# ✅ FIX 1: Corrected Regex (Single backslashes)
 DATE_REGEX = (
     r"\b(?:\d{4}[-/]\d{2}[-/]\d{2}"
     r"|\d{2}[-/.]\d{2}[-/.]\d{4}"
@@ -36,15 +37,12 @@ DATE_REGEX = (
 AMOUNT_REGEX = r"\b(?:INR|Rs\.?|USD|\$)?\s?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)\b"
 NAME_REGEX = r"\b([A-Z][a-z]+(?:\s[A-Z][a-z]+){1,3})\b"
 
-
 @dataclass
 class OCRResult:
     text: str
     avg_confidence: float
     low_confidence_words: List[Dict[str, Any]]
     provider: str
-
-
 def _ensure_dirs() -> None:
     UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -237,15 +235,12 @@ def _pytesseract_ocr(preprocessed_image: np.ndarray) -> OCRResult:
         provider="pytesseract",
     )
 
-
 def _extract_from_pdf(pdf_bytes: bytes) -> str:
     reader = PdfReader(io.BytesIO(pdf_bytes))
     chunks: List[str] = []
     for page in reader.pages:
         chunks.append(page.extract_text() or "")
-    return "\n".join(chunks)
-
-
+    return "\n".join(chunks)  # ✅ FIX: Removed double backslash
 def _text_for_display(raw: str) -> str:
     """Human-readable OCR view: tokens separated by comma + space (extraction still uses raw spacing)."""
     if not (raw or "").strip():
@@ -288,36 +283,38 @@ def _rule_validation(fields: Dict[str, Any]) -> Dict[str, Any]:
     passed = not missing_fields and not format_errors
     return {"passed": passed, "missing_fields": missing_fields, "format_errors": format_errors}
 
-
 def _anomaly_scores(text: str, fields: Dict[str, Any], ocr_conf: float) -> Dict[str, Any]:
     amount = float(fields.get("amount") or 0.0)
     text_len = len(text)
     word_count = len(text.split())
+
     feature_vec = np.array([[text_len, word_count, amount, ocr_conf]])
 
-    sk_model = IsolationForest(random_state=42, contamination=0.12)
-    baseline = np.array(
-        [
-            [600, 120, 2400, 0.9],
-            [500, 90, 1800, 0.92],
-            [720, 140, 3200, 0.88],
-            [680, 130, 2900, 0.91],
-            [560, 95, 2100, 0.89],
-        ]
-    )
-    sk_model.fit(baseline)
-    sk_pred = int(sk_model.predict(feature_vec)[0])
-    sk_score = float(sk_model.decision_function(feature_vec)[0])
+    # 🔥 NEW: dynamic baseline
+    baseline = _get_real_baseline()
 
-    pyod_model = IForest(contamination=0.12, random_state=42)
-    pyod_model.fit(baseline)
-    pyod_pred = int(pyod_model.predict(feature_vec)[0])  # 1 means outlier
+    # fallback if not enough data
+    if len(baseline) < 10:
+        return {
+            "is_anomaly": False,
+            "note": "Not enough real data yet",
+            "feature_vector": {
+                "text_length": text_len,
+                "word_count": word_count,
+                "amount": amount,
+                "ocr_confidence": ocr_conf,
+            },
+        }
 
-    is_anomaly = bool(sk_pred == -1 or pyod_pred == 1)
+    model = IsolationForest(contamination=0.12, random_state=42)
+    model.fit(baseline)
+
+    pred = model.predict(feature_vec)[0]
+    score = model.decision_function(feature_vec)[0]
+
     return {
-        "is_anomaly": is_anomaly,
-        "sklearn_score": sk_score,
-        "pyod_outlier": bool(pyod_pred == 1),
+        "is_anomaly": bool(pred == -1),
+        "score": float(score),
         "feature_vector": {
             "text_length": text_len,
             "word_count": word_count,
@@ -325,6 +322,30 @@ def _anomaly_scores(text: str, fields: Dict[str, Any], ocr_conf: float) -> Dict[
             "ocr_confidence": ocr_conf,
         },
     }
+
+def _recompute_scores_from_stored_doc(data: Dict[str, Any]) -> None:
+    """After human edits fields, re-run validation, anomaly features, confidence, and status."""
+    fields = data.get("fields") or {}
+    raw_text = data.get("raw_ocr_text")
+    if not raw_text:
+        raw_text = (data.get("text") or "").replace(", ", " ")
+    ocr_conf = float(data.get("ocr_confidence", 0))
+    validation = _rule_validation(fields)
+    anomaly = _anomaly_scores(raw_text, fields, ocr_conf)
+    confidence = _confidence_score(ocr_conf, validation, anomaly)
+    flag_reason: List[str] = []
+    if confidence < 70:
+        flag_reason.append("Low confidence")
+    if anomaly.get("is_anomaly"):
+        flag_reason.append("Anomaly detected")
+    if not validation["passed"]:
+        flag_reason.append("Missing/invalid fields")
+    status = "FLAGGED" if flag_reason else "OK"
+    data["validation"] = validation
+    data["anomaly"] = anomaly
+    data["confidence_score"] = confidence
+    data["status"] = status
+    data["flag_reason"] = flag_reason
 
 
 def _confidence_score(ocr_conf: float, validation: Dict[str, Any], anomaly: Dict[str, Any]) -> float:
@@ -382,10 +403,12 @@ def _generate_dashboard_charts(frame: pd.DataFrame) -> Dict[str, str]:
         "confidence_histogram": _plot_to_data_url(conf_fig),
     }
 
-
 def analyze_document(doc_id: str, filename: str, raw_bytes: bytes) -> Dict[str, Any]:
     _ensure_dirs()
+
     ext = filename.lower().rsplit(".", 1)[-1] if "." in filename else ""
+
+    # ---------------- OCR ----------------
     if ext == "pdf":
         text = _extract_from_pdf(raw_bytes)
         ocr_result = OCRResult(
@@ -401,59 +424,120 @@ def analyze_document(doc_id: str, filename: str, raw_bytes: bytes) -> Dict[str, 
         ocr_result = azure_result or _pytesseract_ocr(pre)
 
     raw_text = ocr_result.text
+
+    # ---------------- Processing ----------------
     fields = _extract_fields(raw_text)
     validation = _rule_validation(fields)
     anomaly = _anomaly_scores(raw_text, fields, ocr_result.avg_confidence)
     confidence = _confidence_score(ocr_result.avg_confidence, validation, anomaly)
 
+    # ---------------- Setup Notes ----------------
     setup_notes: List[str] = []
     if ocr_result.provider == "pytesseract_not_installed":
         setup_notes.append(
-            "Tesseract OCR is not installed or not found. Install it and add to PATH, "
-            "or set environment variable TESSERACT_CMD to the full path of tesseract.exe"
+            "Tesseract OCR not found. Install or set TESSERACT_CMD."
         )
+    elif not raw_text.strip() and ext in ("png", "jpg", "jpeg", "webp", "tif", "tiff", "bmp"):
         setup_notes.append(
-            "Windows installer (UB Mannheim): https://github.com/UB-Mannheim/tesseract/wiki"
-        )
-    elif not (raw_text or "").strip() and ext in ("png", "jpg", "jpeg", "webp", "tif", "tiff", "bmp"):
-        setup_notes.append(
-            "No text was extracted — try a higher-contrast scan, or install/configure Tesseract / Azure OCR."
+            "No text extracted — try better image or OCR config."
         )
 
+    # ---------------- FLAG REASONS ----------------
+    flag_reason = []
+
+    if confidence < 70:
+        flag_reason.append("Low confidence")
+
+    if anomaly.get("is_anomaly"):
+        flag_reason.append("Anomaly detected")
+
+    if not validation["passed"]:
+        flag_reason.append("Missing/invalid fields")
+
+    status = "FLAGGED" if flag_reason else "OK"
+
+    # ---------------- PAYLOAD ----------------
     payload = {
         "doc_id": doc_id,
         "filename": filename,
         "timestamp": datetime.utcnow().isoformat() + "Z",
         "ocr_provider": ocr_result.provider,
         "text": _text_for_display(raw_text),
+        "raw_ocr_text": raw_text,
         "fields": fields,
         "validation": validation,
         "anomaly": anomaly,
         "ocr_confidence": round(ocr_result.avg_confidence, 4),
         "low_confidence_words": ocr_result.low_confidence_words,
         "confidence_score": confidence,
-        "status": "FLAGGED" if confidence < 70 or anomaly["is_anomaly"] else "OK",
+        "status": status,
+        "flag_reason": flag_reason,
         "ocr_setup_notes": setup_notes,
     }
 
+    # ---------------- GEMINI EXPLANATION (ONLY IF FLAGGED) ----------------
+    pass
+    # ---------------- SAVE ----------------
     with open(OUTPUT_DIR / f"{doc_id}.json", "w", encoding="utf-8") as out_file:
         json.dump(payload, out_file, indent=2)
-    return payload
 
+    return payload
 
 def save_feedback(doc_id: str, corrected_fields: Dict[str, Any], reviewer: str) -> Dict[str, Any]:
     _ensure_dirs()
+
+    file_path = OUTPUT_DIR / f"{doc_id}.json"
+    applied = False
+    snapshot: Dict[str, Any] = {}
+
+    if file_path.is_file():
+        with open(file_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        if "fields" not in data or not isinstance(data["fields"], dict):
+            raise ValueError("Document record is missing a valid 'fields' object")
+
+        for k, v in corrected_fields.items():
+            if v is not None and k in ("name", "date", "amount"):
+                data["fields"][k] = v
+
+        _recompute_scores_from_stored_doc(data)
+        data["feedback_applied_at"] = datetime.utcnow().isoformat() + "Z"
+        data["last_reviewer"] = reviewer
+
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2)
+
+        applied = True
+        snapshot = {
+            "doc_id": data.get("doc_id"),
+            "status": data.get("status"),
+            "confidence_score": data.get("confidence_score"),
+            "validation": data.get("validation"),
+            "fields": data.get("fields"),
+        }
+
     record = {
         "doc_id": doc_id,
         "reviewer": reviewer,
         "corrected_fields": corrected_fields,
         "timestamp": datetime.utcnow().isoformat() + "Z",
+        "applied_to_document": applied,
     }
+
     with open(FEEDBACK_FILE, "a", encoding="utf-8") as fb:
         fb.write(json.dumps(record) + "\n")
-    return {"saved": True, "record": record}
 
+    if not applied:
+        return {
+            "message": f"No saved analysis found for doc_id {doc_id!r}. Entry logged to feedback audit only.",
+            "applied": False,
+        }
 
+    return {
+        "message": "Corrections applied; validation, anomaly features, and confidence recomputed.",
+        "applied": True,
+        "document": snapshot,
+    }
 def dashboard_metrics() -> Dict[str, Any]:
     _ensure_dirs()
     docs: List[Dict[str, Any]] = []
@@ -496,3 +580,29 @@ def dashboard_metrics() -> Dict[str, Any]:
             for d in recent
         ],
     }
+
+def _get_real_baseline(n: int = 50) -> np.ndarray:
+    data = []
+
+    for file in OUTPUT_DIR.glob("*.json"):
+        if file.name == FEEDBACK_FILE.name:
+            continue
+
+        try:
+            with open(file, "r", encoding="utf-8") as f:
+                d = json.load(f)
+
+            # only learn from GOOD documents
+            if d.get("status") == "OK":
+                fv = d.get("anomaly", {}).get("feature_vector", {})
+
+                data.append([
+                    float(fv.get("text_length", 0)),
+                    float(fv.get("word_count", 0)),
+                    float(fv.get("amount", 0)),
+                    float(fv.get("ocr_confidence", 0)),
+                ])
+        except:
+            continue
+
+    return np.array(data[-n:])

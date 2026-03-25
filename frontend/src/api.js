@@ -1,6 +1,12 @@
 const API_BASE =
   import.meta.env.VITE_API_URL?.replace(/\/$/, "") || "";
 
+/** Backend compares this to DOCINTEL_ADMIN_EMAIL (default mpraharshitha2006@gmail.com). */
+export function adminHeaders(userEmail) {
+  if (!userEmail) return {};
+  return { "X-DocIntel-User-Email": userEmail };
+}
+
 async function handleJson(res) {
   const text = await res.text();
   let data;
@@ -48,7 +54,16 @@ export async function submitFeedback(payload) {
   return handleJson(res);
 }
 
-export async function fetchDashboard() {
-  const res = await fetch(`${API_BASE}/pipeline/dashboard`);
+export async function fetchDashboard(userEmail) {
+  const res = await fetch(`${API_BASE}/pipeline/dashboard`, {
+    headers: { ...adminHeaders(userEmail) },
+  });
+  return handleJson(res);
+}
+
+export async function fetchMlEvaluation(userEmail) {
+  const res = await fetch(`${API_BASE}/ml/evaluation`, {
+    headers: { ...adminHeaders(userEmail) },
+  });
   return handleJson(res);
 }

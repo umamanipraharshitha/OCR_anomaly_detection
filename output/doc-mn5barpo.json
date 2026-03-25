@@ -1,0 +1,99 @@
+{
+  "doc_id": "doc-mn5barpo",
+  "filename": "29.04.2025_20.31.50_REC.png",
+  "timestamp": "2026-03-25T00:35:38.025796Z",
+  "ocr_provider": "pytesseract",
+  "text": "Lo), \u2014., C, Medan, Application, 4, Developmentilfaproject, NEWTPROJEGT, Registered, Total, Course, Score,, Course, Letter, Grade, -, 81.00, Course, Grade, Letter, -A, Go, to, Project, page, >",
+  "raw_ocr_text": "Lo) \u2014. C Medan Application 4 Developmentilfaproject NEWTPROJEGT Registered Total Course Score, Course Letter Grade - 81.00 Course Grade Letter -A Go to Project page >",
+  "fields": {
+    "name": "Medan Application",
+    "date": null,
+    "amount": 4.0
+  },
+  "validation": {
+    "passed": false,
+    "missing_fields": [
+      "date"
+    ],
+    "format_errors": []
+  },
+  "anomaly": {
+    "is_anomaly": false,
+    "note": "Not enough real data yet",
+    "feature_vector": {
+      "text_length": 166,
+      "word_count": 26,
+      "amount": 4.0,
+      "ocr_confidence": 0.703076923076923
+    }
+  },
+  "ocr_confidence": 0.7031,
+  "low_confidence_words": [
+    {
+      "word": "Lo)",
+      "confidence": 21.0,
+      "bbox": {
+        "x": 810,
+        "y": 49,
+        "w": 36,
+        "h": 36
+      }
+    },
+    {
+      "word": "\u2014.",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 460,
+        "y": 146,
+        "w": 104,
+        "h": 11
+      }
+    },
+    {
+      "word": "C",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 809,
+        "y": 115,
+        "w": 37,
+        "h": 44
+      }
+    },
+    {
+      "word": "Medan",
+      "confidence": 19.0,
+      "bbox": {
+        "x": 104,
+        "y": 130,
+        "w": 206,
+        "h": 112
+      }
+    },
+    {
+      "word": "Developmentilfaproject",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 116,
+        "y": 256,
+        "w": 628,
+        "h": 90
+      }
+    },
+    {
+      "word": "NEWTPROJEGT",
+      "confidence": 0.0,
+      "bbox": {
+        "x": 108,
+        "y": 367,
+        "w": 281,
+        "h": 65
+      }
+    }
+  ],
+  "confidence_score": 75.39,
+  "status": "FLAGGED",
+  "flag_reason": [
+    "Missing/invalid fields"
+  ],
+  "ocr_setup_notes": []
+}

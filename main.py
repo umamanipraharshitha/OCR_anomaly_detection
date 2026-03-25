@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.routers.ml_train import router as ml_train_router
 from app.routers.ocr import router as ocr_router
 
 app = FastAPI(title="Document Intelligence Pipeline API")
@@ -19,6 +20,7 @@ app.add_middleware(
 )
 
 app.include_router(ocr_router)
+app.include_router(ml_train_router)
 
 @app.get("/")
 def root():
@@ -27,4 +29,9 @@ def root():
         "analyze_endpoint": "/pipeline/analyze",
         "feedback_endpoint": "/pipeline/feedback",
         "dashboard_endpoint": "/pipeline/dashboard",
+        "ml_train_endpoint": "POST /ml/train-from-api (admin header required)",
+        "ml_metrics_endpoint": "GET /ml/last-metrics (admin)",
+        "ml_evaluation_endpoint": "GET /ml/evaluation (admin)",
+        "ml_model_info": "GET /ml/model-info (admin)",
+        "admin_header": "X-DocIntel-User-Email must match DOCINTEL_ADMIN_EMAIL",
     }

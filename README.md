@@ -1,4 +1,4 @@
-# Document Intelligence Pipeline (Hackathon MVP) .
+# Document Intelligence Pipeline (Hackathon MVP) . . .
 
 ## Run the API
 
